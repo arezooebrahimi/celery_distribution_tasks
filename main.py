@@ -1,29 +1,21 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.gzip import GZipMiddleware
-from pydantic import BaseModel
-from celery_app.tasks import app_9000,app_9002,app_9004,app_9006
+from fastapi import FastAPI, HTTPException,Request
+from celery_app.tasks import app_1000,app_1002,app_1004,app_1006
 import random
 
 app = FastAPI()
-app.add_middleware(GZipMiddleware, minimum_size=1000) # For GZIP
 
 
-class RunTaskItem(BaseModel):
-    num_of_keywords:int
-
-
-app.post("/run_tasks")
-async def run_tasks(item:RunTaskItem):
+@app.get("/run_tasks")
+async def run_tasks(num_of_tasks:int):
     try: 
-        app_list = [app_9000,app_9002,app_9004,app_9006]
-        keywords = []
-        for i in range(item.num_of_keywords):
-            keywords.append(random.choice(open("keywords.txt" , encoding='utf-8').readlines()))
+        app_list = [app_1000,app_1002,app_1004,app_1006]
 
-        for i in range(0,len(keywords), 4):
-            batch = keywords[i:i+4]
-            for j in range(4):
-                app_list[j].apply_async([batch[j].replace("\n", ""),0])     
+        for i in range(0,num_of_tasks, 4):
+            app_list[0].apply_async() 
+            app_list[1].apply_async()     
+            app_list[2].apply_async()     
+            app_list[3].apply_async()     
+    
         
         return 'ok'
 

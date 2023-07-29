@@ -54,72 +54,68 @@ def get_active_workers():
 
   
 @app.task(soft_time_limit=200)
-def app_9000(keyword):
-    inactive_app =  get_inactive_app(9000)
+def app_1000():
+    inactive_app =  get_inactive_app(1000)
     if inactive_app:
-        inactive_app.apply_async([keyword])
+        inactive_app.apply_async()
     
     else:
         try:
-            # This app is supposed to do different things, 
-            # the time of doing it is not known, that's why I used time.sleep()
+            # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(30)    
         except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async([keyword])
+            app_timeout.apply_async()
             raise e
         
     
 
 @app.task(soft_time_limit=200)
-def app_9002(keyword):
-    inactive_app =  get_inactive_app(9002)
+def app_1002():
+    inactive_app =  get_inactive_app(1002)
     if inactive_app:
-        inactive_app.apply_async([keyword])
+        inactive_app.apply_async()
     
     else:
         try:
-            # This app is supposed to do different things, 
-            # the time of doing it is not known, that's why I used time.sleep()
+            # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(14)
         except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async([keyword])
+            app_timeout.apply_async()
             raise e
         
 
 @app.task(soft_time_limit=200)
-def app_9004(keyword):
-    inactive_app =  get_inactive_app(9004)
+def app_1004():
+    inactive_app =  get_inactive_app(1004)
     if inactive_app:
-        inactive_app.apply_async([keyword])
+        inactive_app.apply_async()
     else:
         try:
-            # This app is supposed to do different things, 
-            # the time of doing it is not known, that's why I used time.sleep()
+            # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(50)
         except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async([keyword])
+            app_timeout.apply_async()
             raise e
    
     
 
 @app.task(soft_time_limit=200)
-def app_9006(keyword):
-    inactive_app =  get_inactive_app(9004)
+def app_1006():
+    inactive_app =  get_inactive_app(1004)
     if inactive_app:
-        inactive_app.apply_async([keyword])
+        inactive_app.apply_async()
 
     else:
         try:
-            # This app is supposed to do different things, 
-            # the time of doing it is not known, that's why I used time.sleep()
+            # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(150)
         except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async([keyword])
+            app_timeout.apply_async()
             raise e
 
 
 @app.task(soft_time_limit=400)
-def app_timeout(keyword):
+def app_timeout():
         try:
             # It runs when apps timeout
             time.sleep(394)        
@@ -128,10 +124,13 @@ def app_timeout(keyword):
 
 
    
-app_list = [app_9000,app_9002,app_9004,app_9006]
+app_list = [app_1000,app_1002,app_1004,app_1006]
 def get_inactive_app(current_node):
+    print(f'run get_inactive_app c={current_node}')
     result = get_active_queue()
     queue_inactive = next((key for key, value in result.items() if value["active"] == 0), None)
+    print(f'run get_inactive_app inactive={queue_inactive}')
+
     tor_node = None
     if queue_inactive:
         tor_node = int(queue_inactive.replace('q_',''))
@@ -139,7 +138,7 @@ def get_inactive_app(current_node):
            tor_node = None
         
         else:
-            index = tor_node%9000
+            index = tor_node%1000
             if index==0:
                 return app_list[0]
             else:
