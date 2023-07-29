@@ -15,39 +15,16 @@ def get_active_queue():
         queue_stats = defaultdict(lambda: {'active': 0, 'reserved': 0})
 
         for worker_name, tasks in active_tasks.items():
-            if 'tor' in worker_name:
-                for task in tasks:
-                    queue_name = task['delivery_info']['routing_key']
-                    queue_stats[queue_name]['active'] += 1
+            for task in tasks:
+                queue_name = task['delivery_info']['routing_key']
+                queue_stats[queue_name]['active'] += 1
 
         for worker_name, tasks in reserved_tasks.items():
-            if 'tor' in worker_name:
-                for task in tasks:
-                    queue_name = task['delivery_info']['routing_key']
-                    queue_stats[queue_name]['reserved'] += 1
+            for task in tasks:
+                queue_name = task['delivery_info']['routing_key']
+                queue_stats[queue_name]['reserved'] += 1
 
         return dict(queue_stats)
-
-    except Exception as e:
-        raise TypeError(str(e))
-
-def get_active_workers():
-    try:
-        i = Inspect(app=app)
-        active_tasks = i.active()
-        reserved_tasks = i.reserved()
-
-        worker_status = {}
-        if active_tasks:
-            for worker_name in active_tasks:
-                if 'tor' in worker_name:
-                    worker_status.update({worker_name.split('@')[0]:{'active':len(active_tasks[worker_name])}})
-        if reserved_tasks:
-            for worker_name in reserved_tasks:
-                if 'tor' in worker_name:
-                    worker_status[worker_name.split('@')[0]]['reserved']=len(reserved_tasks[worker_name])
-
-        return worker_status
 
     except Exception as e:
         raise TypeError(str(e))

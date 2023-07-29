@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException,Request
-from celery_app.tasks import app_1000,app_1002,app_1004,app_1006
+from celery_app.tasks import app_1000,app_1002,app_1004,app_1006,get_active_queue
 import random
 
 app = FastAPI()
@@ -21,3 +21,10 @@ async def run_tasks(num_of_tasks:int):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+
+@app.get("/get_active_queue")
+async def get_active_q():
+    res = get_active_queue()
+    print(res)
+    return 'ok'
