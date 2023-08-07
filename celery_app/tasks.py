@@ -41,7 +41,6 @@ def app_1000():
             # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(30)    
         except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async()
             raise e
         
     
@@ -57,7 +56,6 @@ def app_1002():
             # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(14)
         except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async()
             raise e
         
 
@@ -71,7 +69,6 @@ def app_1004():
             # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(50)
         except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async()
             raise e
    
     
@@ -86,16 +83,6 @@ def app_1006():
         try:
             # The running time of apps (app_1000, app_1002, app_1004, app_1006) is different, I used sleep for simulation
             time.sleep(150)
-        except SoftTimeLimitExceeded as e:
-            app_timeout.apply_async()
-            raise e
-
-
-@app.task(soft_time_limit=400)
-def app_timeout():
-        try:
-            # It runs when apps timeout
-            time.sleep(394)        
         except SoftTimeLimitExceeded as e:
             raise e
 
