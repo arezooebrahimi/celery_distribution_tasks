@@ -9,5 +9,4 @@ task_routes={
     'celery_app.tasks.app_1002':{'queue':'q_app'},
     'celery_app.tasks.app_1004':{'queue':'q_app'},
     'celery_app.tasks.app_1006':{'queue':'q_app'},
-    'celery_app.tasks.app_timeout':{'queue':'q_timeout'},
 }
