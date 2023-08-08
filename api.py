@@ -15,16 +15,9 @@ async def run_tasks(num_of_tasks:int):
             app_list[1].apply_async()     
             app_list[2].apply_async()     
             app_list[3].apply_async()     
-    
-        
+      
         return 'ok'
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
-@app.get("/get_active_queue")
-async def get_active_q():
-    res = get_active_queue()
-    print(res)
-    return 'ok'
