@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+
+    ana1:
+        image: kafka-test:latest
+        container_name: celery
+        environment:
+            - TZ=Asia/Tehran
+        volumes:
+            - .:/usr/src/app
+        command: >
+            sh -c "python3"
+        stdin_open: true # docker run -i
+        tty: true        # docker run -t
+        restart: unless-stopped
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
